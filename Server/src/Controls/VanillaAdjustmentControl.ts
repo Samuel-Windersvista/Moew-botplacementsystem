@@ -147,8 +147,40 @@ export class VanillaAdjustmentControl
                 {
                     const newHostilitySettings = this.cloner.clone(newPMCHostilitySettings);
                     newHostilitySettings.BotRole = hostility[bot].BotRole;
+                    const indexOfSameSide = newHostilitySettings.AlwaysEnemies.indexOf(hostility[bot].BotRole, 0);
+                    if (indexOfSameSide > -1)
+                    {
+                        newHostilitySettings.AlwaysEnemies.splice(indexOfSameSide, 1);
+                    }
                     hostility[bot] = newHostilitySettings;
                 }
+            }
+        }
+
+        const pmcHostility = this.pmcConfig.hostilitySettings;
+
+        for (const bot in pmcHostility)
+        {
+            if (!pmcHostility[bot].additionalEnemyTypes.includes("assault"))
+            {
+                pmcHostility[bot].additionalEnemyTypes.push("assault")
+            }
+            if (!pmcHostility[bot].additionalEnemyTypes.includes("pmcBEAR"))
+            {
+                pmcHostility[bot].additionalEnemyTypes.push("pmcBEAR")
+            }
+            if (!pmcHostility[bot].additionalEnemyTypes.includes("pmcUSEC"))
+            {
+                pmcHostility[bot].additionalEnemyTypes.push("pmcUSEC")
+            }
+            pmcHostility[bot].savageEnemyChance = 100;            
+            pmcHostility[bot].bearEnemyChance = 100;            
+            pmcHostility[bot].usecEnemyChance = 100;
+            pmcHostility[bot].savagePlayerBehaviour = "AlwaysEnemies";
+
+            for (const chancedEnemy in pmcHostility[bot].chancedEnemies)
+            {
+                pmcHostility[bot].chancedEnemies[chancedEnemy].EnemyChance = 100;
             }
         }
     }

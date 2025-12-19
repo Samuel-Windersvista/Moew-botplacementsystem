@@ -29,6 +29,10 @@ class ABPS implements IPreSptLoadMod, IPostDBLoadMod
             logger.error(`[ABPS] This version of ABPS was not made for your version of SPT. Disabling. Requires ${this.validMinimumSptVersion(container)} or higher.`);
             return;
         }
+        if (this.checkForAlphaTag(container))
+        {
+            logger.warning("[ABPS] This version of ABPS is an alpha. Do not report issues with this mod to support.");
+        }
 
         this.instance.preSptLoad(container, "ABPS");
         this.instance.staticRouterHooks.registerRouterHooks();
@@ -70,6 +74,18 @@ class ABPS implements IPreSptLoadMod, IPostDBLoadMod
         const modSptVersion = fileSysem.readJson(packageJsonPath).sptVersion;
 
         return minVersion(modSptVersion)
+    }
+
+    public checkForAlphaTag(container: DependencyContainer): boolean
+    {
+        const fileSysem = container.resolve<FileSystemSync>("FileSystemSync");
+        const packageJsonPath: string = path.join(__dirname, "../package.json");
+        const modVersion = fileSysem.readJson(packageJsonPath).version;
+        if (modVersion.includes("alpha"))
+        {
+            return true;
+        }
+        return false;
     }
 }
 

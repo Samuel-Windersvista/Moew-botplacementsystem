@@ -22,6 +22,7 @@ Server/ABPSConfig.staticwebassets.endpoints.json
 Client/.vs
 Client/bin
 Client/obj
+Client/.idea
 Client/release
 Client/Patches/GameWorldPatch.cs
 Client/Utils/SpawnPointGetter.cs

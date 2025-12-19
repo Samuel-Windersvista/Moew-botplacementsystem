@@ -12,44 +12,50 @@ namespace acidphantasm_botplacementsystem.Utils
     {
         public static string mainProfileID = string.Empty;
         public static string mapName = string.Empty;
-        public static List<IPlayer> allPMCs = new List<IPlayer>();
-        public static List<IPlayer> allBots = new List<IPlayer>();
-        public static List<IPlayer> allScavs = new List<IPlayer>();
-        public static List<ISpawnPoint> allSpawnPoints = new List<ISpawnPoint>();
-        public static List<ISpawnPoint> playerSpawnPoints = new List<ISpawnPoint>();
-        public static List<BotZone> currentMapZones = new List<BotZone>();
+        public static List<IPlayer> allPMCs = new();
+        public static List<IPlayer> allBots = new();
+        public static List<IPlayer> allScavs = new();
+        public static List<ISpawnPoint> allSpawnPoints = new();
+        public static List<ISpawnPoint> playerSpawnPoints = new();
+        public static List<ISpawnPoint> backupPlayerSpawnPoints = new();
+        public static List<ISpawnPoint> combinedSpawnPoints = new();
+        public static List<BotZone> currentMapZones = new();
 
-        public static Dictionary<string, string[]> mapHotSpots = new Dictionary<string, string[]>()
+        public static Dictionary<string, string[]> mapHotSpots = new()
         {
             {"rezervbase", ["ZoneSubStorage", "ZoneBarrack"]},
             {"shoreline", ["ZoneSanatorium1", "ZoneSanatorium2"]},
             {"lighthouse", ["Zone_LongRoad", "Zone_Chalet", "Zone_Village"]},
             {"interchange", ["ZoneCenter", "ZoneCenterBot"]},
-            {"bigmap", ["ZoneDormitory", "ZoneScavBase"]}
+            {"bigmap", ["ZoneDormitory", "ZoneScavBase", "ZoneOldAZS", "ZoneGasStation"]}
         };
 
-    public void Awake()
+        public void Awake()
         {
             mainProfileID = GetPlayerProfile().ProfileId;
-            Plugin.LogSource.LogInfo(mainProfileID);
         }
+
         public static Profile GetPlayerProfile()
         {
             return ClientAppUtils.GetClientApp().GetClientBackEndSession().Profile;
         }
 
-        public static string GetCurrentLocation()
+        public static string CurrentLocation
         {
-            if (mapName != string.Empty) return mapName;
-
-            var gameWorld = Singleton<GameWorld>.Instance;
-            if (gameWorld != null)
+            get
             {
-                mapName = gameWorld.MainPlayer.Location;
-                return mapName;
+                if (mapName != string.Empty) return mapName;
+
+                var gameWorld = Singleton<GameWorld>.Instance;
+                if (gameWorld != null)
+                {
+                    mapName = gameWorld.LocationId;
+                    return mapName;
+                }
+                return "default";
             }
-            return "default";
         }
+
         public static List<IPlayer> GetAllPMCs()
         {
             var gameWorld = Singleton<GameWorld>.Instance;
@@ -58,10 +64,10 @@ namespace acidphantasm_botplacementsystem.Utils
                 allPMCs = gameWorld.RegisteredPlayers
                     .Where(x => x.Profile.Side == EPlayerSide.Bear || x.Profile.Side == EPlayerSide.Usec)
                     .ToList();
-                return allPMCs;
             }
-            return new List<IPlayer>();
+            return allPMCs;
         }
+
         public static List<IPlayer> GetAllScavs()
         {
             var gameWorld = Singleton<GameWorld>.Instance;
@@ -70,26 +76,21 @@ namespace acidphantasm_botplacementsystem.Utils
                 allScavs = gameWorld.RegisteredPlayers
                     .Where(x => x.Profile.Info.Settings.Role == WildSpawnType.assault)
                     .ToList();
-                return allScavs;
             }
-            return new List<IPlayer>();
+            return allScavs;
         }
-        public static List<IPlayer> GetAllBots()
+        
+        public static List<IPlayer> GetAllCachedBots()
         {
-            var gameWorld = Singleton<GameWorld>.Instance;
-            if (gameWorld != null)
-            {
-                allBots = gameWorld.RegisteredPlayers.ToList();
-                return allBots;
-            }
-            return new List<IPlayer>();
+            return GetAllPMCs()
+                .Concat(GetAllScavs())
+                .ToList();
         }
 
         public static List<ISpawnPoint> GetAllSpawnPoints()
         {
             if (allSpawnPoints.Count == 0)
             {
-                Plugin.LogSource.LogInfo("Getting All SpawnPoints");
                 allSpawnPoints = SpawnPointManagerClass.CreateFromScene().ToList();
             }
             return allSpawnPoints;
@@ -97,16 +98,42 @@ namespace acidphantasm_botplacementsystem.Utils
 
         public static List<ISpawnPoint> GetPlayerSpawnPoints()
         {
-            if (playerSpawnPoints.Count == 0 || allSpawnPoints.Count == 0)
+            if (playerSpawnPoints.Count == 0)
             {
-                Plugin.LogSource.LogInfo("Getting All Player SpawnPoints");
                 playerSpawnPoints = GetAllSpawnPoints()
-                .Where(x => x.Categories.ContainPlayerCategory())
-                .Where(x => x.Infiltration != null)
-                .ToList();
+                    .Where(x => x.Categories.ContainPlayerCategory())
+                    .Where(x => x.Infiltration != null)
+                    .ToList();
             }
             return playerSpawnPoints;
         }
+
+        public static List<ISpawnPoint> GetBotNoBossNoSnipeSpawnPoints()
+        {
+            if (backupPlayerSpawnPoints.Count == 0)
+            {
+                backupPlayerSpawnPoints = GetAllSpawnPoints()
+                    .Where(x => x.Categories.ContainBotCategory())
+                    .Where(x => !x.Categories.ContainBossCategory())
+                    .Where(x => !x.IsSnipeZone)
+                    .ToList();
+            }
+            return backupPlayerSpawnPoints;
+        }
+        
+        public static List<ISpawnPoint> GetCombinedPlayerAndBotSpawnPoints()
+        {
+            if (combinedSpawnPoints.Count == 0)
+            {
+                combinedSpawnPoints = GetPlayerSpawnPoints()
+                    .Concat(GetBotNoBossNoSnipeSpawnPoints())
+                    .Distinct()
+                    .ToList();
+            }
+
+            return combinedSpawnPoints;
+        }
+        
         public static List<BotZone> GetMapBotZones()
         {
             List<BotZone> shuffledList = currentMapZones.OrderBy(_ => Guid.NewGuid()).ToList();

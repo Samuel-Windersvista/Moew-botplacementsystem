@@ -54,11 +54,11 @@ export const newPMCHostilitySettings =
     ],
     BearEnemyChance: 100,
     BearPlayerBehaviour: "AlwaysEnemies",
-    BotRole: "",
+    BotRole: "tempHolder",
     ChancedEnemies: [],
-    Neutral: [],
+    Neutral: ["shooterBTR"],
     SavagePlayerBehaviour: "AlwaysEnemies",
     UsecEnemyChance: 100,
     UsecPlayerBehaviour: "AlwaysEnemies",
-    Warn: []
+    Warn: ["sectactPriestEvent"]
 };

@@ -4,12 +4,16 @@ using BepInEx.Logging;
 
 namespace acidphantasm_botplacementsystem
 {
-    [BepInPlugin("com.acidphantasm.botplacementsystem", "acidphantasm-BotPlacementSystem", "1.1.2")]
+    [BepInPlugin("com.acidphantasm.botplacementsystem", "acidphantasm-BotPlacementSystem", "1.1.4")]
     public class Plugin : BaseUnityPlugin
     {
         public static ManualLogSource LogSource;
 
-
+        public static bool despawnFurthest;
+        public static bool despawnPmcs;
+        public static float despawnDistance;
+        public static float despawnTimer;
+        
         public static int customsMapLimit;
         public static int factoryMapLimit;
         public static int interchangeMapLimit;
@@ -25,6 +29,7 @@ namespace acidphantasm_botplacementsystem
         public static int minimumChance;
         public static int maximumChance;
 
+        public static bool pmcSpawnAnywhere;
         public static float customs_PMCSpawnDistanceCheck;
         public static float factory_PMCSpawnDistanceCheck;
         public static float interchange_PMCSpawnDistanceCheck;
@@ -35,7 +40,6 @@ namespace acidphantasm_botplacementsystem
         public static float shoreline_PMCSpawnDistanceCheck;
         public static float streets_PMCSpawnDistanceCheck;
         public static float woods_PMCSpawnDistanceCheck;
-
 
         public static int softCap;
         public static int pScavChance;
@@ -54,22 +58,46 @@ namespace acidphantasm_botplacementsystem
         public static float streets_ScavSpawnDistanceCheck;
         public static float woods_ScavSpawnDistanceCheck;
 
+
         internal void Awake()
         {
             LogSource = Logger;
 
+            /*
+             * This patch is only for development purposes in specific scenarios (or it would be in IFDEBUG)
+             */
             //new OnGameStartedPatch().Enable();
+
+            // Trigger /apbs/save
             new UnregisterPlayerPatch().Enable();
+
+            // Trigger /apbs/load
             new MenuLoadPatch().Enable();
 
+            // Set bot limits
             new MaxBotLimitPatch().Enable();
+
+            // Progressive Chances patches
             new LocalGameProgressivePatch().Enable();
             new BossAddProgressionPatch().Enable();
+
+            // Patch to build new lists for everything
             new PMCWaveCountPatch().Enable();
+
+            // Main PMC Method Patch to trigger ABPS spawning instead
             new PMCDistancePatch().Enable();
+
+            // If assaultgroup, make assault instead. This stops the "wave" of scavs that spawn in NewSpawn mode that track and rush the player
             new AssaultGroupPatch().Enable();
+
+            // Patch the NewSpawn primary method (it's in Update) to spawn scavs differently
             new NonWavesSpawnScenarioUpdatePatch().Enable();
+
+            // Zone Reselector for Scavs - primarily for redistribution based on active scavs in a zone and hotzone configuration
             new TryToSpawnInZonePatch().Enable();
+            
+            // Check enemy patch to prevent bots in the same group being enemies, but allow other groups containing the same PMC type to be enemies
+            new IsPlayerEnemyPatch().Enable();
             
             ABPSConfig.InitABPSConfig(Config);
         }

@@ -38,6 +38,7 @@
     <Compile Include="ConfigurationManagerAttributes.cs" />
     <Compile Include="Patches\GameWorldPatch.cs" />
     <Compile Include="Patches\BossSpawnPatches.cs" />
+    <Compile Include="Patches\IsPlayerEnemyPatch.cs" />
     <Compile Include="Patches\LocalGameProgressivePatch.cs" />
     <Compile Include="Patches\MaxBotLimitPatch.cs" />
     <Compile Include="Patches\MenuLoadPatch.cs" />

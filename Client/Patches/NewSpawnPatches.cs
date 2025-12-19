@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Comfort.Common;
+using Systems.Effects;
 using UnityEngine;
 
 namespace acidphantasm_botplacementsystem.Patches
@@ -30,6 +32,8 @@ namespace acidphantasm_botplacementsystem.Patches
     }
     internal class NonWavesSpawnScenarioUpdatePatch : ModulePatch
     {
+        private static float _nextDespawnCheckTime = 0f;
+        
         protected override MethodBase GetTargetMethod()
         {
             return AccessTools.Method(typeof(NonWavesSpawnScenario), nameof(NonWavesSpawnScenario.Update));
@@ -102,7 +106,7 @@ namespace acidphantasm_botplacementsystem.Patches
             {
                 //Logger.LogInfo("Sending spawn data from new spawn system");
                 var wildSpawn = WildSpawnType.assault;
-                string mapName = Utility.GetCurrentLocation().ToLower();
+                string mapName = Utility.CurrentLocation.ToLower();
                 if (Utility.currentMapZones.Count == 0)
                 {
                     Utility.currentMapZones = ___botsController_0.BotSpawner._allBotZones.ToList();
@@ -114,7 +118,7 @@ namespace acidphantasm_botplacementsystem.Patches
                     BotsCount = 1,
                     Time = Time.time,
                     Difficulty = ___gclass1652_0.Random(),
-                    IsPlayers = GClass835.IsTrue100(Plugin.pScavChance) ? true : false,
+                    IsPlayers = GClass835.IsTrue100(Plugin.pScavChance),
                     Side = EPlayerSide.Savage,
                     WildSpawnType = wildSpawn,
                     SpawnAreaName = botZone,
@@ -124,18 +128,81 @@ namespace acidphantasm_botplacementsystem.Patches
 
                 ___botsController_0.ActivateBotsByWave(botWaveDataClass);
             }
-            return false;
-
-            /*
-            for (int i = 0; i < num; i++)
+            
+            
+            if (Time.time >= _nextDespawnCheckTime && Plugin.despawnFurthest)
             {
-                Logger.LogInfo("New Spawn System inside trigger");
-                WildSpawnType wildSpawnType = ___gclass1652_1.Random();
-                BotDifficulty botDifficulty = ___gclass1652_0.Random();
-                GClass663 gclass = new GClass663(EPlayerSide.Savage, wildSpawnType, botDifficulty, 0f, null);
-                ___botsController_0.ActivateBotsWithoutWave(1, gclass);
+                _nextDespawnCheckTime = Time.time + Plugin.despawnTimer;
+                DespawnFurthestBots(___botsController_0);
             }
-            */
+            
+            return false;
+        }
+        
+        private static void DespawnFurthestBots(BotsController botsController)
+        {
+            float despawnDistance = Plugin.despawnDistance;
+            var allBotsNoBosses = Utility.GetAllCachedBots();
+            var botsToDespawn = new List<BotOwner>();
+            var centerOfActivePlayerPlayers = GetCenterOfActivePlayers();
+            
+            foreach (var bot in allBotsNoBosses)
+            {
+                if (bot == null) continue;
+                if (!bot.IsAI) continue;
+                if (!Plugin.despawnPmcs && bot.Profile.Info.Side is EPlayerSide.Bear or EPlayerSide.Usec) continue;
+                
+                float dist = Vector3.Distance(bot.Position, centerOfActivePlayerPlayers);
+                if (dist >= despawnDistance)
+                {
+                    botsToDespawn.Add(bot.AIData.BotOwner);
+                }
+            }
+
+            foreach (var botToDespawn in botsToDespawn)
+            {
+                AttemptToDespawnBot(botsController, botToDespawn);
+            }
+        }
+
+        private static Vector3 GetCenterOfActivePlayers()
+        {
+            var allBotsNoBosses = Utility.GetAllCachedBots();
+            Vector3 centerPoint = Vector3.zero;
+            int count = 0;
+
+            foreach (var player in allBotsNoBosses)
+            {
+                if (player == null) continue;
+                if (player.IsAI) continue;
+                if (player.Profile.GetCorrectedNickname().StartsWith("headless_")) continue;
+
+                centerPoint += player.Position;
+                count++;
+            }
+
+            return count == 0 ? centerPoint : centerPoint / count;
+        }
+
+        private static void AttemptToDespawnBot(BotsController botsController, BotOwner botToDespawn)
+        {
+            var effectsCommutator = Singleton<Effects>.Instance.EffectsCommutator;
+            var gameWorld = Singleton<GameWorld>.Instance;
+
+            if (effectsCommutator is null || gameWorld is null) return;
+
+            var botOwner = botToDespawn;
+            var botPlayer = botToDespawn.GetPlayer;
+            
+            effectsCommutator.StopBleedingForPlayer(botPlayer);
+            gameWorld.UnregisterPlayer(botOwner);
+            gameWorld.UnregisterPlayer(botPlayer);
+            botToDespawn.Deactivate();
+            botToDespawn.Dispose();
+            botsController.BotDied(botOwner);
+            botsController.DestroyInfo(botPlayer);
+            UnityEngine.Object.DestroyImmediate(botOwner.gameObject);
+            UnityEngine.Object.Destroy(botOwner);
         }
 
         private static string GetValidBotZone(WildSpawnType botType, int count, BotZone[] allZones, string location, BotsController _botsController)
@@ -175,7 +242,7 @@ namespace acidphantasm_botplacementsystem.Patches
                 //Logger.LogInfo("TryToSpawnInZoneAndDelay Hit with empty spawn points and is a scav/marksman");
 
                 WildSpawnType botType = data.Profiles[0].Info.Settings.Role;
-                string mapName = Utility.GetCurrentLocation().ToLower();
+                string mapName = Utility.CurrentLocation.ToLower();
 
                 List<IPlayer> pmcList = Utility.GetAllPMCs();
                 float pmcDistance = GetDistanceForMap(mapName);
