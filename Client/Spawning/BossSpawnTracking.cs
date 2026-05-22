@@ -10,8 +10,8 @@ namespace acidphantasm_botplacementsystem.Spawning
 {
     public class BossSpawnTracking
     {
-        public static Dictionary<string, Dictionary<string, CustomizedObject>> BossInfoOutOfRaid { get; set; } = [];
-        public static Dictionary<string, CustomizedObject> BossInfoForProfile { get; set; } = [];
+        public static Dictionary<string, Dictionary<string, CustomizedObject>> BossInfoOutOfRaid { get; set; } = new Dictionary<string, Dictionary<string, CustomizedObject>>();
+        public static Dictionary<string, CustomizedObject> BossInfoForProfile { get; set; } = new Dictionary<string, CustomizedObject>();
 
         public static HashSet<WildSpawnType> TrackedBosses = new HashSet<WildSpawnType>
         {
@@ -79,12 +79,18 @@ namespace acidphantasm_botplacementsystem.Spawning
             try
             {
                 string payload = await RequestHandler.GetJsonAsync("/abps/load");
-                BossInfoOutOfRaid = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, CustomizedObject>>>(payload);
+                var deserialized = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, CustomizedObject>>>(payload);
+                BossInfoOutOfRaid = deserialized ?? new Dictionary<string, Dictionary<string, CustomizedObject>>();
 
-                var profileID = Utility.GetPlayerProfile().ProfileId;
-                if (BossInfoOutOfRaid.ContainsKey(profileID))
+                var profile = Utility.GetPlayerProfile();
+                var profileID = profile?.ProfileId;
+                if (profileID != null && BossInfoOutOfRaid.TryGetValue(profileID, out var profileDict))
                 {
-                    BossInfoForProfile = BossInfoOutOfRaid[profileID];
+                    BossInfoForProfile = profileDict ?? new Dictionary<string, CustomizedObject>();
+                }
+                else
+                {
+                    BossInfoForProfile = new Dictionary<string, CustomizedObject>();
                 }
             }
             catch (Exception ex)

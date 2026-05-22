@@ -48,31 +48,36 @@ export class MapSpawnControl
     public configureInitialData(): void 
     {
         this.locationData = this.databaseService.getTables().locations;
-        for (const map in this.validMaps) 
+        for (const mapName of this.validMaps) 
         {
-            const mapName = this.validMaps[map];
-            this.locationData[mapName].base.BossLocationSpawn = [];
+            const mapEntry = this.locationData[mapName];
+            if (!mapEntry || !mapEntry.base) 
+            {
+                this.logger.warning(`[ABPS] Map "${mapName}" not found in location database. Skipping.`);
+                continue;
+            }
+            mapEntry.base.BossLocationSpawn = [];
             this.botMapCache[mapName] = [];
             this.scavMapCache[mapName] = [];
             if (ModConfig.config.scavConfig.waves.enable && ModConfig.config.scavConfig.startingScavs.enable) 
             {
-                this.vanillaAdjustmentControl.enableAllSpawnSystem(this.locationData[mapName].base);
+                this.vanillaAdjustmentControl.enableAllSpawnSystem(mapEntry.base);
             }
             else if (!ModConfig.config.scavConfig.waves.enable && ModConfig.config.scavConfig.startingScavs.enable)
             {
-                this.vanillaAdjustmentControl.disableNewSpawnSystem(this.locationData[mapName].base);
+                this.vanillaAdjustmentControl.disableNewSpawnSystem(mapEntry.base);
             }
             else if (!ModConfig.config.scavConfig.waves.enable && !ModConfig.config.scavConfig.startingScavs.enable)
             {
-                this.vanillaAdjustmentControl.disableAllSpawnSystem(this.locationData[mapName].base);
+                this.vanillaAdjustmentControl.disableAllSpawnSystem(mapEntry.base);
             }
             else if (ModConfig.config.scavConfig.waves.enable && !ModConfig.config.scavConfig.startingScavs.enable)
             {
-                this.vanillaAdjustmentControl.disableOldSpawnSystem(this.locationData[mapName].base);
+                this.vanillaAdjustmentControl.disableOldSpawnSystem(mapEntry.base);
             }
-            this.vanillaAdjustmentControl.removeExistingWaves(this.locationData[mapName].base);
-            this.vanillaAdjustmentControl.fixPMCHostility(this.locationData[mapName].base);
-            this.vanillaAdjustmentControl.adjustNewWaveSettings(this.locationData[mapName].base);
+            this.vanillaAdjustmentControl.removeExistingWaves(mapEntry.base);
+            this.vanillaAdjustmentControl.fixPMCHostility(mapEntry.base);
+            this.vanillaAdjustmentControl.adjustNewWaveSettings(mapEntry.base);
             /*
             This is how you make a spawn point properly
             if (this.validMaps[map] == "bigmap") {
@@ -125,40 +130,36 @@ export class MapSpawnControl
 
     private buildBossWaves(): void 
     {
-        for (const map in this.validMaps) 
+        for (const mapName of this.validMaps) 
         {
-            const mapName = this.validMaps[map];
-            const mapData = this.bossSpawnControl.getCustomMapData(this.validMaps[map], this.locationData[mapName].base.EscapeTimeLimit);
+            const mapData = this.bossSpawnControl.getCustomMapData(mapName, this.locationData[mapName].base.EscapeTimeLimit);
             if (mapData.length) mapData.forEach((index) => (this.botMapCache[mapName].push(index)));
         }
     }
 
     private buildPMCWaves(): void 
     {
-        for (const map in this.validMaps) 
+        for (const mapName of this.validMaps) 
         {
-            const mapName = this.validMaps[map];
-            const mapData = this.pmcSpawnControl.getCustomMapData(this.validMaps[map], this.locationData[mapName].base.EscapeTimeLimit);
+            const mapData = this.pmcSpawnControl.getCustomMapData(mapName, this.locationData[mapName].base.EscapeTimeLimit);
             if (mapData.length) mapData.forEach((index) => (this.botMapCache[mapName].push(index)));
         }
     }
 
     private buildStartingScavs(): void 
     {
-        for (const map in this.validMaps) 
+        for (const mapName of this.validMaps) 
         {
-            const mapName = this.validMaps[map];
             if (mapName == "laboratory") continue;
-            const mapData = this.scavSpawnControl.getCustomMapData(this.validMaps[map]);
+            const mapData = this.scavSpawnControl.getCustomMapData(mapName);
             if (mapData.length) mapData.forEach((index) => (this.scavMapCache[mapName].push(index)));
         }
     }
 
     private replaceOriginalLocations(): void 
     {
-        for (const map in this.validMaps) 
+        for (const mapName of this.validMaps) 
         {
-            const mapName = this.validMaps[map];
             this.locationData[mapName].base.BossLocationSpawn = this.cloner.clone(this.botMapCache[mapName]);
             this.locationData[mapName].base.waves = this.cloner.clone(this.scavMapCache[mapName]);
         }
@@ -168,9 +169,15 @@ export class MapSpawnControl
     {
         location = location.toLowerCase();
         this.locationData = this.databaseService.getTables().locations;
+        const mapEntry = this.locationData[location];
+        if (!mapEntry || !mapEntry.base) 
+        {
+            this.logger.warning(`[ABPS] Map "${location}" not found during rebuild. Skipping.`);
+            return;
+        }
         this.botMapCache[location] = [];
         this.scavMapCache[location] = [];
-        this.locationData[location].base.waves = [];
+        mapEntry.base.waves = [];
         this.rebuildBossWave(location);
         this.rebuildPMCWave(location);    
         this.rebuildStartingScavs(location) 
@@ -214,24 +221,59 @@ export class MapSpawnControl
 
     public adjustWaves(mapBase: ILocationBase, raidAdjustments: IRaidChanges): void
     {
+        if (!mapBase || !mapBase.Id) {
+            this.logger.warning("[ABPS] adjustWaves called with invalid mapBase. Skipping.");
+            return;
+        }
+        if (!Array.isArray(mapBase.BossLocationSpawn)) {
+            this.logger.warning("[ABPS] adjustWaves called with invalid BossLocationSpawn. Skipping.");
+            return;
+        }
+        mapBase.waves = Array.isArray(mapBase.waves) ? mapBase.waves : [];
+
         const locationName = mapBase.Id.toLowerCase();
-        if (raidAdjustments.simulatedRaidStartSeconds > 60)
+        const skipRaw = Number(raidAdjustments?.simulatedRaidStartSeconds ?? 0);
+        const skipSeconds = Number.isFinite(skipRaw) ? Math.max(0, skipRaw) : 0;
+
+        if (skipSeconds <= 60)
         {
-            const mapBosses = mapBase.BossLocationSpawn.filter((x) => x.Time == -1 && x.BossName != "pmcUSEC" && x.BossName != "pmcBEAR");
-            mapBase.BossLocationSpawn = mapBase.BossLocationSpawn.filter((x) => x.Time > raidAdjustments.simulatedRaidStartSeconds && (x.BossName == "pmcUSEC" || x.BossName == "pmcBEAR"));
+            return; // No significant adjustment needed
+        }
 
-            for (const bossWave of mapBase.BossLocationSpawn)
-            {
-                bossWave.Time -= Math.max(raidAdjustments.simulatedRaidStartSeconds, 0);
-            }
+        // Preserve fixed start waves (Time == -1) - bosses that spawn at raid start
+        const startWaves = mapBase.BossLocationSpawn.filter((x) => x.Time === -1);
 
-            const totalRemainingTime = raidAdjustments.raidTimeMinutes * 60;
-            const newStartingPMCs = this.pmcSpawnControl.generateScavRaidRemainingPMCs(locationName, totalRemainingTime);
-            newStartingPMCs.forEach((index) => (mapBase.BossLocationSpawn.push(index)));
-            mapBosses.forEach((index) => (mapBase.BossLocationSpawn.push(index)));
+        // Get all waves with Time AFTER the skip point (both PMC and non-PMC timed waves)
+        const remainingTimed = mapBase.BossLocationSpawn
+            .filter((x) => typeof x.Time === "number" && x.Time > skipSeconds)
+            .map((x) => {
+                const cloned = this.cloner.clone(x);
+                cloned.Time -= skipSeconds;
+                return cloned;
+            });
 
-            const newStartingScavs = this.scavSpawnControl.generateStartingScavs(locationName, "assault", true);
-            newStartingScavs.forEach((index) => (mapBase.waves.push(index)));
+        // Regenerate starting PMCs based on remaining raid time
+        const raidMinsRaw = Number(raidAdjustments?.raidTimeMinutes ?? 0);
+        const totalRemainingTime = Number.isFinite(raidMinsRaw) ? Math.max(0, raidMinsRaw) * 60 : 0;
+        const newStartingPMCs = this.pmcSpawnControl.generateScavRaidRemainingPMCs(locationName, totalRemainingTime);
+
+        // Regenerate starting Scavs for the late-start scenario
+        const newStartingScavs = this.scavSpawnControl.generateStartingScavs(locationName, "assault", true);
+
+        // Reassemble: time-shifted waves + new PMCs + fixed start waves
+        const clonedPMCs = Array.isArray(newStartingPMCs) ? this.cloner.clone(newStartingPMCs) : [];
+        const clonedStartWaves = Array.isArray(startWaves) ? this.cloner.clone(startWaves) : [];
+        mapBase.BossLocationSpawn = [
+            ...remainingTimed,
+            ...clonedPMCs,
+            ...clonedStartWaves,
+        ];
+
+        // Add new Scav waves
+        const clonedScavs = Array.isArray(newStartingScavs) ? this.cloner.clone(newStartingScavs) : [];
+        for (const scavWave of clonedScavs)
+        {
+            mapBase.waves.push(scavWave);
         }
     }
 }

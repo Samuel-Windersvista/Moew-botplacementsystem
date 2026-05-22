@@ -21,6 +21,7 @@ namespace acidphantasm_botplacementsystem.Utils
         public static List<ISpawnPoint> combinedSpawnPoints = new();
         public static List<BotZone> currentMapZones = new();
 
+        private static int _lastFrame = -1;
         public static Dictionary<string, string[]> mapHotSpots = new()
         {
             {"rezervbase", ["ZoneSubStorage", "ZoneBarrack"]},
@@ -56,26 +57,45 @@ namespace acidphantasm_botplacementsystem.Utils
             }
         }
 
+        private static void InvalidateCacheIfNewFrame()
+        {
+            int currentFrame = UnityEngine.Time.frameCount;
+            if (currentFrame != _lastFrame)
+            {
+                _lastFrame = currentFrame;
+                allPMCs.Clear();
+                allScavs.Clear();
+            }
+        }
+
         public static List<IPlayer> GetAllPMCs()
         {
+            InvalidateCacheIfNewFrame();
+            if (allPMCs.Count > 0) return allPMCs;
+
             var gameWorld = Singleton<GameWorld>.Instance;
             if (gameWorld != null)
             {
-                allPMCs = gameWorld.RegisteredPlayers
+                var pmcs = gameWorld.RegisteredPlayers
                     .Where(x => x.Profile.Side == EPlayerSide.Bear || x.Profile.Side == EPlayerSide.Usec)
                     .ToList();
+                allPMCs.AddRange(pmcs);
             }
             return allPMCs;
         }
 
         public static List<IPlayer> GetAllScavs()
         {
+            InvalidateCacheIfNewFrame();
+            if (allScavs.Count > 0) return allScavs;
+
             var gameWorld = Singleton<GameWorld>.Instance;
             if (gameWorld != null)
             {
-                allScavs = gameWorld.RegisteredPlayers
+                var scavs = gameWorld.RegisteredPlayers
                     .Where(x => x.Profile.Info.Settings.Role == WildSpawnType.assault)
                     .ToList();
+                allScavs.AddRange(scavs);
             }
             return allScavs;
         }
@@ -136,8 +156,25 @@ namespace acidphantasm_botplacementsystem.Utils
         
         public static List<BotZone> GetMapBotZones()
         {
-            List<BotZone> shuffledList = currentMapZones.OrderBy(_ => Guid.NewGuid()).ToList();
-            return shuffledList;
+            return ShuffleCopy(currentMapZones);
+        }
+
+        private static System.Random _shuffleRng = new System.Random();
+
+        public static void ShuffleInPlace<T>(List<T> list)
+        {
+            for (int i = list.Count - 1; i > 0; i--)
+            {
+                int k = _shuffleRng.Next(i + 1);
+                (list[k], list[i]) = (list[i], list[k]);
+            }
+        }
+
+        public static List<T> ShuffleCopy<T>(List<T> list)
+        {
+            var copy = new List<T>(list);
+            ShuffleInPlace(copy);
+            return copy;
         }
     }
 }

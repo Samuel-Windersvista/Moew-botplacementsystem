@@ -141,7 +141,7 @@ namespace acidphantasm_botplacementsystem.Patches
         
         private static void DespawnFurthestBots(BotsController botsController)
         {
-            float despawnDistance = Plugin.despawnDistance;
+            float despawnDistanceSq = Plugin.despawnDistance * Plugin.despawnDistance;
             var allBotsNoBosses = Utility.GetAllCachedBots();
             var botsToDespawn = new List<BotOwner>();
             var centerOfActivePlayerPlayers = GetCenterOfActivePlayers();
@@ -152,8 +152,7 @@ namespace acidphantasm_botplacementsystem.Patches
                 if (!bot.IsAI) continue;
                 if (!Plugin.despawnPmcs && bot.Profile.Info.Side is EPlayerSide.Bear or EPlayerSide.Usec) continue;
                 
-                float dist = Vector3.Distance(bot.Position, centerOfActivePlayerPlayers);
-                if (dist >= despawnDistance)
+                if ((bot.Position - centerOfActivePlayerPlayers).sqrMagnitude >= despawnDistanceSq)
                 {
                     botsToDespawn.Add(bot.AIData.BotOwner);
                 }
@@ -193,22 +192,28 @@ namespace acidphantasm_botplacementsystem.Patches
 
             var botOwner = botToDespawn;
             var botPlayer = botToDespawn.GetPlayer;
-            
+
+            // Stop game logic first
             effectsCommutator.StopBleedingForPlayer(botPlayer);
+            botToDespawn.Deactivate();
+            
+            // Unregister player
             gameWorld.UnregisterPlayer(botOwner);
             gameWorld.UnregisterPlayer(botPlayer);
-            botToDespawn.Deactivate();
-            botToDespawn.Dispose();
+            
+            // Notify BotsController
             botsController.BotDied(botOwner);
             botsController.DestroyInfo(botPlayer);
-            UnityEngine.Object.DestroyImmediate(botOwner.gameObject);
+
+            // Use Destroy instead of DestroyImmediate (safe, executes next frame)
+            UnityEngine.Object.Destroy(botOwner.gameObject);
             UnityEngine.Object.Destroy(botOwner);
         }
 
         private static string GetValidBotZone(WildSpawnType botType, int count, BotZone[] allZones, string location, BotsController _botsController)
         {
             List<BotZone> botZones = allZones.ToList().Where(x => !x.SnipeZone).ToList();
-            botZones = botZones.OrderBy(_ => Guid.NewGuid()).ToList();
+            Utility.ShuffleInPlace(botZones);
 
             if (Plugin.enableHotzones && GClass835.IsTrue100(Plugin.hotzoneScavChance) && Utility.mapHotSpots.ContainsKey(location))
             {
@@ -302,7 +307,7 @@ namespace acidphantasm_botplacementsystem.Patches
                 .Where(x => x.Categories == ESpawnCategoryMask.All || x.Categories.ContainBotCategory())
                 .ToList();
 
-            allSpawnPoints = allSpawnPoints.OrderBy(_ => Guid.NewGuid()).ToList();
+            Utility.ShuffleInPlace(allSpawnPoints);
 
             int count = 0;
             for (int i = 0; i < allSpawnPoints.Count; i++)
@@ -323,6 +328,9 @@ namespace acidphantasm_botplacementsystem.Patches
         {
             if (spawnPoint == null) return false;
             if (spawnPoint.Collider == null) return false;
+
+            float distanceSq = distance * distance;
+
             if (players != null && players.Count != 0)
             {
                 foreach (IPlayer player in players)
@@ -336,7 +344,7 @@ namespace acidphantasm_botplacementsystem.Patches
                     {
                         return false;
                     }
-                    if (Vector3.Distance(spawnPoint.Position, player.Position) < distance)
+                    if ((spawnPoint.Position - player.Position).sqrMagnitude < distanceSq)
                     {
                         return false;
                     }
@@ -397,7 +405,10 @@ namespace acidphantasm_botplacementsystem.Patches
         }
         private static BotZone GetNewValidBotZone(List<BotZone> botZones)
         {
-            return botZones.Where(x => !x.SnipeZone).ToList().OrderBy(_ => Guid.NewGuid()).FirstOrDefault();
+            var candidates = botZones.Where(x => !x.SnipeZone).ToList();
+            if (candidates.Count == 0) return null;
+            Utility.ShuffleInPlace(candidates);
+            return candidates[0];
         }
         private static List<ISpawnPoint> GetNewSpawnPoints(string mapName, BotZone oldBotZone, BotZone newBotZone, bool mapHasHotzone, IReadOnlyCollection<IPlayer> pmcList, float pmcDistance, IReadOnlyCollection<IPlayer> scavList, float scavDistance, WildSpawnType botType)
         {

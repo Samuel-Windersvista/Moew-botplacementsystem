@@ -53,6 +53,8 @@ namespace acidphantasm_botplacementsystem.Spawning
                 {
                     await SpawnLeader(@class.creationData, spawnPoint, @class.botZone, @class.followersCount, botProfileDataClass, new Action<BotOwner>(@class.method_0));
                     await SpawnFollowers(@class.creationData, @class.botZone, @class.followersCount, @class.spawnParams, @class.wave, @class.side, @class.openedPositions, true, leaderProfileId);
+                    // Clean up group tracking data
+                    allPmcGroups.Remove(leaderProfileId);
                 }
             }
             else
@@ -272,12 +274,14 @@ namespace acidphantasm_botplacementsystem.Spawning
             }
             _botSpawner._botCreator.ActivateBot(@class.data, zone, @class.shallBeGroup, new Func<BotOwner, BotZone, BotsGroup>(GetGroupAndSetEnemies), new Action<BotOwner>(@class.method_0), cancellationToken);
 
-            // Check if it's a wave, and return completed if not
+            // Check if it's a wave, and spawn boss followers now
             var spawnedBotProfileId = data.Profiles[0].ProfileId;
-            if (!wavePmcGroupClassData.TryGetValue(spawnedBotProfileId, out var originalClassData)) return;
-            
-            // Spawn boss followers now
-            SpawnFollowers(@originalClassData.creationData, @originalClassData.botZone, @originalClassData.followersCount, @originalClassData.spawnParams, @originalClassData.wave, @originalClassData.side, @originalClassData.openedPositions, true, spawnedBotProfileId);
+            if (wavePmcGroupClassData.TryGetValue(spawnedBotProfileId, out var originalClassData))
+            {
+                SpawnFollowers(@originalClassData.creationData, @originalClassData.botZone, @originalClassData.followersCount, @originalClassData.spawnParams, @originalClassData.wave, @originalClassData.side, @originalClassData.openedPositions, true, spawnedBotProfileId);
+                // Remove entry to prevent memory leak
+                wavePmcGroupClassData.Remove(spawnedBotProfileId);
+            }
         }
         
         private static BotsGroup GetGroupAndSetEnemies(BotOwner bot, BotZone zone)

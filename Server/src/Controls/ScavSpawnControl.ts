@@ -74,10 +74,18 @@ export class ScavSpawnControl
         const scavCap = lateStart ? maxStartingSpawns * 0.75 : maxStartingSpawns;
         const playerScavChance = lateStart ? 60 : 10;
 
-        const availableSpawnZones = botRole == "assault" ? createExhaustableArray(this.getNonMarksmanSpawnZones(location), this.randomUtil, this.cloner) : createExhaustableArray(this.getMarksmanSpawnZones(location), this.randomUtil, this.cloner);
+        const spawnZones = botRole == "assault" 
+            ? (this.getNonMarksmanSpawnZones(location) ?? [])
+            : (this.getMarksmanSpawnZones(location) ?? []);
+
+        if (botRole !== "assault" && spawnZones.length === 0) {
+            return [];
+        }
+
+        const availableSpawnZones = createExhaustableArray(spawnZones, this.randomUtil, this.cloner);
         let spawnsAdded = botRole == "assault" ? 0 : waveLength;
         let marksmanCount = 0;
-        let marksmanSpawnCount = scavCap;
+        let marksmanSpawnCount = waveLength;
 
         while (spawnsAdded < scavCap)
         {
@@ -153,15 +161,15 @@ export class ScavSpawnControl
                 return Customs_SnipeSpawnZones;
             case "factory4_day":
             case "factory4_night":
-                return undefined;
+                return [];
             case "interchange":
-                return undefined;
+                return [];
             case "laboratory":
-                return undefined;
+                return [];
+            case "rezervbase":
+                return [];
             case "lighthouse":
                 return Lighthouse_SnipeSpawnZones;
-            case "rezervbase":
-                return undefined;
             case "sandbox":
             case "sandbox_high":
                 return GroundZero_SnipeSpawnZones;

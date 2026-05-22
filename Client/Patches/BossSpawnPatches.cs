@@ -128,7 +128,7 @@ namespace acidphantasm_botplacementsystem.Patches
             List<ISpawnPoint> validSpawnPoints = new List<ISpawnPoint>();
             
             List<ISpawnPoint> list = Utility.GetPlayerSpawnPoints();
-            list = list.OrderBy(_ => Guid.NewGuid()).ToList();
+            Utility.ShuffleInPlace(list);
 
             bool foundInitialPoint = false;
 
@@ -139,7 +139,7 @@ namespace acidphantasm_botplacementsystem.Patches
                 {
                     return validSpawnPoints;
                 }
-                if (foundInitialPoint && Vector3.Distance(checkPoint.Position, validSpawnPoints[0].Position) <= 10f)
+                if (foundInitialPoint && (checkPoint.Position - validSpawnPoints[0].Position).sqrMagnitude <= 100f)
                 {
                     validSpawnPoints.Add(checkPoint);
                 }
@@ -161,7 +161,7 @@ namespace acidphantasm_botplacementsystem.Patches
             List<ISpawnPoint> validSpawnPoints = new List<ISpawnPoint>();
             
             List<ISpawnPoint> alternativeList = backupToPlayer ? Utility.GetBotNoBossNoSnipeSpawnPoints() : Utility.GetCombinedPlayerAndBotSpawnPoints();
-            alternativeList = alternativeList.OrderBy(_ => Guid.NewGuid()).ToList();
+            Utility.ShuffleInPlace(alternativeList);
             
             for (int i = 0; i < alternativeList.Count; i++)
             {
@@ -183,12 +183,16 @@ namespace acidphantasm_botplacementsystem.Patches
         {
             if (spawnPoint == null) return false;
             if (spawnPoint.Collider == null) return false;
+
+            // Precompute squared distance to avoid sqrt per loop iteration
+            float distanceSq = distance * distance;
+
             if (Singleton<GameWorld>.Instance.MainPlayer != null)
             {
                 var mainPlayer = Singleton<GameWorld>.Instance.MainPlayer;
                 if (checkAgainstMainPlayer && mainPlayer.Side == EPlayerSide.Savage)
                 {
-                    if (Vector3.Distance(spawnPoint.Position, mainPlayer.Position) < distance)
+                    if ((spawnPoint.Position - mainPlayer.Position).sqrMagnitude < distanceSq)
                     {
                         return false;
                     }
@@ -206,7 +210,7 @@ namespace acidphantasm_botplacementsystem.Patches
                     {
                         return false;
                     }
-                    if (Vector3.Distance(spawnPoint.Position, player.Position) < distance)
+                    if ((spawnPoint.Position - player.Position).sqrMagnitude < distanceSq)
                     {
                         return false;
                     }

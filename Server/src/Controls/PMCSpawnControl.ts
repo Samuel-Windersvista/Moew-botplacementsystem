@@ -75,6 +75,7 @@ export class PMCSpawnControl
 
             const pmcType = this.randomUtil.getChance100(50) ? "pmcUSEC" : "pmcBEAR";
             const bossDefaultData = this.cloner.clone(this.getDefaultValuesForBoss(pmcType));
+            if (!bossDefaultData || bossDefaultData.length === 0) continue;
 
             bossDefaultData[0].BossEscortAmount = groupSize.toString();
             bossDefaultData[0].BossDifficult = this.weightedRandomHelper.getWeightedValue(difficultyWeights);
@@ -126,6 +127,7 @@ export class PMCSpawnControl
 
                 const pmcType = this.randomUtil.getChance100(50) ? "pmcUSEC" : "pmcBEAR";
                 const bossDefaultData = this.cloner.clone(this.getDefaultValuesForBoss(pmcType));
+                if (!bossDefaultData || bossDefaultData.length === 0) continue;
 
                 bossDefaultData[0].BossEscortAmount = groupSize.toString();
                 bossDefaultData[0].Time = currentWaveTime;
@@ -154,8 +156,8 @@ export class PMCSpawnControl
             case "pmcBEAR":
                 return pmcBEARData;
             default:
-                this.logger.error(`[ABPS] PMC not found in config ${boss}`)
-                return undefined;
+                this.logger.error(`[ABPS] PMC not found in config: ${boss}. Skipping.`);
+                return [];
         }
     }
 
@@ -165,7 +167,7 @@ export class PMCSpawnControl
         const ignoreMaxBotCaps = ModConfig.config.pmcConfig.startingPMCs.ignoreMaxBotCaps;
         const minPMCCount = ModConfig.config.pmcConfig.startingPMCs.mapLimits[location].min;
         const maxPMCCount = ModConfig.config.pmcConfig.startingPMCs.mapLimits[location].max;
-        let generatedPMCCount = this.randomUtil.getInt(minPMCCount, maxPMCCount);
+        let generatedPMCCount: number;
         const groupChance = ModConfig.config.pmcConfig.startingPMCs.groupChance;
         const groupLimit = ModConfig.config.pmcConfig.startingPMCs.maxGroupCount;
         const groupMaxSize = ModConfig.config.pmcConfig.startingPMCs.maxGroupSize;
@@ -194,6 +196,7 @@ export class PMCSpawnControl
 
             const pmcType = this.randomUtil.getChance100(50) ? "pmcUSEC" : "pmcBEAR";
             const bossDefaultData = this.cloner.clone(this.getDefaultValuesForBoss(pmcType));
+            if (!bossDefaultData || bossDefaultData.length === 0) continue;
 
             bossDefaultData[0].BossEscortAmount = groupSize.toString();
             bossDefaultData[0].BossDifficult = this.weightedRandomHelper.getWeightedValue(difficultyWeights);

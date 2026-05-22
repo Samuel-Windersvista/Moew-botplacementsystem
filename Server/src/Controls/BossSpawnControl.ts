@@ -50,12 +50,14 @@ export class BossSpawnControl
         for (const boss in ModConfig.config.bossConfig)
         {
             const bossDefaultData = this.cloner.clone(this.getDefaultValuesForBoss(boss, location));
+            if (!bossDefaultData || bossDefaultData.length === 0) continue;
+
             const bossConfigData = ModConfig.config.bossConfig[boss];
             const difficultyWeights = ModConfig.config.bossDifficulty;
 
             if (!bossConfigData.enable) continue;
 
-            if (boss == "exUsec" && !bossConfigData.disableVanillaSpawns && location == "lighthouse" || boss == "pmcBot" && !bossConfigData.disableVanillaSpawns && (location == "laboratory" || location == "rezervbase"))
+            if ((boss == "exUsec" && !bossConfigData.disableVanillaSpawns && location == "lighthouse") || (boss == "pmcBot" && !bossConfigData.disableVanillaSpawns && (location == "laboratory" || location == "rezervbase")))
             {
                 for (const bossSpawn in bossDefaultData)
                 {
@@ -180,8 +182,8 @@ export class BossSpawnControl
             case "gifter":
                 return gifterData;
             default:
-                this.logger.error(`[ABPS] Boss not found in config ${boss}`)
-                return undefined;
+                this.logger.error(`[ABPS] Boss not found in config: ${boss}. Skipping.`);
+                return [];
         }
     }
 }

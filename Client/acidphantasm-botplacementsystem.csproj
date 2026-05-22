@@ -36,8 +36,8 @@
   <ItemGroup>
     <Compile Include="ABPSConfig.cs" />
     <Compile Include="ConfigurationManagerAttributes.cs" />
-    <Compile Include="Patches\GameWorldPatch.cs" />
     <Compile Include="Patches\BossSpawnPatches.cs" />
+    <Compile Include="Patches\UnregisterPlayerPatch.cs" />
     <Compile Include="Patches\IsPlayerEnemyPatch.cs" />
     <Compile Include="Patches\LocalGameProgressivePatch.cs" />
     <Compile Include="Patches\MaxBotLimitPatch.cs" />
@@ -45,13 +45,12 @@
     <Compile Include="Patches\NewSpawnPatches.cs" />
     <Compile Include="Spawning\BossSpawnTracking.cs" />
     <Compile Include="Spawning\PMCSpawning.cs" />
-    <Compile Include="Utils\SpawnPointGetter.cs" />
     <Compile Include="Utils\Utility.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <PropertyGroup>
-    <TarkovDir Condition=" '$(TarkovDir)' == '' ">D:\SPT 3.11 DEV\</TarkovDir>
+    <TarkovDir Condition=" '$(TarkovDir)' == '' ">E:\云文件\GitHub\游戏本体环境\</TarkovDir>
     <TarkovPluginsSPTDir>$(TarkovDir)BepInEx\plugins\spt\</TarkovPluginsSPTDir>
     <TarkovManagedDir>$(TarkovDir)EscapeFromTarkov_Data\Managed\</TarkovManagedDir>
     <TarkovBepInExCoreDir>$(TarkovDir)BepInEx\core\</TarkovBepInExCoreDir>
@@ -156,7 +155,6 @@
       <ConfigComponents Include="$(ProjectDir)../Server/dist/config/**" />
       <ServerComponentsExtras Include="$(ProjectDir)../Server/dist/package.json" />
       <ServerComponentsExtras Include="$(ProjectDir)../Server/dist/LICENSE" />
-      <ServerComponentsExtras Include="$(ProjectDir)../Server/dist/ABPSConfig.exe" />
     </ItemGroup>
     <!-- Copies the output and resources to tarkov game folder -->
     <Copy SourceFiles="@(OutputDLL);@(License)" DestinationFolder="$(TarkovDir)BepInEx\plugins\acidphantasm-botplacementsystem\%(RecursiveDir)" />
