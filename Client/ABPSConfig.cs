@@ -117,7 +117,7 @@ namespace acidphantasm_botplacementsystem
             factoryMapLimit = config.Bind(
                 GeneralConfig,
                 "Max Bots - Factory",
-                13,
+                 15,
                 new ConfigDescription("Max bots allowed on map, value is ignored by certain bots.\nStarting PMCs ignore the cap by default, if you want to change this you must do so in the server config.\n\nChanges do not take effect until next raid.",
                 new AcceptableValueRange<int>(1, 50),
                 new ConfigurationManagerAttributes { Order = loadOrder-- }));
@@ -167,7 +167,7 @@ namespace acidphantasm_botplacementsystem
             groundZeroMapLimit = config.Bind(
                 GeneralConfig,
                 "Max Bots - Ground Zero",
-                16,
+                 18,
                 new ConfigDescription("Max bots allowed on map, value is ignored by certain bots.\nStarting PMCs ignore the cap by default, if you want to change this you must do so in the server config.\n\nChanges do not take effect until next raid.",
                 new AcceptableValueRange<int>(1, 50),
                 new ConfigurationManagerAttributes { Order = loadOrder-- }));
@@ -197,7 +197,7 @@ namespace acidphantasm_botplacementsystem
             woodsMapLimit = config.Bind(
                 GeneralConfig,
                 "Max Bots - Woods",
-                22,
+                 24,
                 new ConfigDescription("Max bots allowed on map, value is ignored by certain bots.\nStarting PMCs ignore the cap by default, if you want to change this you must do so in the server config.\n\nChanges do not take effect until next raid.",
                 new AcceptableValueRange<int>(1, 50),
                 new ConfigurationManagerAttributes { Order = loadOrder-- }));

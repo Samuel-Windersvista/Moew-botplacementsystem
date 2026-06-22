@@ -1,639 +1,640 @@
 {
-    "pmcDifficulty": {
-        "easy": 10,
-        "normal": 50,
-        "hard": 30,
-        "impossible": 10
-    },
-    "pmcConfig": {
-        "startingPMCs": {
-            "enable": true,
-            "ignoreMaxBotCaps": true,
-            "groupChance": 25,
-            "maxGroupSize": 3,
-            "maxGroupCount": 4,
-            "mapLimits": {
-                "bigmap": {
-                    "min": 8,
-                    "max": 10
-                },
-                "factory4_day": {
-                    "min": 5,
-                    "max": 7
-                },
-                "factory4_night": {
-                    "min": 5,
-                    "max": 7
-                },
-                "interchange": {
-                    "min": 9,
-                    "max": 13
-                },
-                "laboratory": {
-                    "min": 7,
-                    "max": 9
-                },
-                "lighthouse": {
-                    "min": 7,
-                    "max": 10
-                },
-                "rezervbase": {
-                    "min": 8,
-                    "max": 10
-                },
-                "sandbox": {
-                    "min": 8,
-                    "max": 11
-                },
-                "sandbox_high": {
-                    "min": 8,
-                    "max": 11
-                },
-                "shoreline": {
-                    "min": 9,
-                    "max": 13
-                },
-                "tarkovstreets": {
-                    "min": 7,
-                    "max": 10
-                },
-                "woods": {
-                    "min": 9,
-                    "max": 13
-                }
-            }
+  "pmcDifficulty": {
+    "easy": 10,
+    "normal": 35,
+    "hard": 45,
+    "impossible": 10
+  },
+  "pmcConfig": {
+    "startingPMCs": {
+      "enable": true,
+      "ignoreMaxBotCaps": false,
+      "groupChance": 35,
+      "maxGroupSize": 3,
+      "maxGroupCount": 2,
+      "mapLimits": {
+        "bigmap": {
+          "min": 7,
+          "max": 7
         },
-        "waves": {
-            "enable": false,
-            "ignoreMaxBotCaps": false,
-            "groupChance": 10,
-            "maxGroupSize": 2,
-            "maxGroupCount": 3,
-            "maxBotsPerWave": 5,
-            "delayBeforeFirstWave": 500,
-            "secondsBetweenWaves": 360,
-            "stopWavesBeforeEndOfRaidLimit": 300
-        }        
-    },
-    "scavConfig": {
-        "startingScavs": {
-            "enable": true,
-            "maxBotSpawns": {
-                "bigmap": 5,
-                "factory4_day": 3,
-                "factory4_night": 3,
-                "interchange": 5,
-                "laboratory": 0,
-                "lighthouse": 5,
-                "rezervbase": 5,
-                "sandbox": 5,
-                "sandbox_high": 5,
-                "shoreline": 5,
-                "tarkovstreets": 5,
-                "woods": 5
-            },
-            "startingMarksman": true
+        "factory4_day": {
+          "min": 6,
+          "max": 6
         },
-        "waves": {
-            "enable": true,
-            "enableCustomFactory": true,
-            "startSpawns": 60,
-            "stopSpawns": 600,
-            "activeTimeMin": 180,
-            "activeTimeMax": 240,
-            "quietTimeMin": 120,
-            "quietTimeMax": 180,
-            "checkToSpawnTimer": 15,
-            "pendingBotsToTrigger": 3
+        "factory4_night": {
+          "min": 6,
+          "max": 6
+        },
+        "interchange": {
+          "min": 6,
+          "max": 7
+        },
+        "laboratory": {
+          "min": 6,
+          "max": 6
+        },
+        "lighthouse": {
+          "min": 7,
+          "max": 7
+        },
+        "rezervbase": {
+          "min": 6,
+          "max": 7
+        },
+        "sandbox": {
+          "min": 6,
+          "max": 6
+        },
+        "sandbox_high": {
+          "min": 6,
+          "max": 7
+        },
+        "shoreline": {
+          "min": 6,
+          "max": 7
+        },
+        "tarkovstreets": {
+          "min": 7,
+          "max": 8
+        },
+        "woods": {
+          "min": 8,
+          "max": 9
         }
+      }
     },
-    "bossDifficulty": {
-        "easy": 0,
-        "normal": 60,
-        "hard": 30,
-        "impossible": 10
-    },
-    "bossConfig": {
-        "bossKnight": {
-            "enable": true,
-            "time": -1,
-            "spawnChance": {
-                "bigmap": 30,
-                "factory4_day": 0,
-                "factory4_night": 0,
-                "interchange": 0,
-                "laboratory": 0,
-                "lighthouse": 30,
-                "rezervbase": 0,
-                "sandbox": 0,
-                "sandbox_high": 0,
-                "shoreline": 30,
-                "tarkovstreets": 0,
-                "woods": 30
-            },
-            "bossZone": {
-                "bigmap": "ZoneScavBase",
-                "factory4_day": "",
-                "factory4_night": "",
-                "interchange": "",
-                "laboratory": "",
-                "lighthouse": "Zone_TreatmentContainers,Zone_Chalet",
-                "rezervbase": "",
-                "sandbox": "",
-                "sandbox_high": "",
-                "shoreline": "ZoneMeteoStation",
-                "tarkovstreets": "",
-                "woods": "ZoneScavBase2"
-            }
-        },
-        "bossBully": {
-            "enable": true,
-            "time": -1,
-            "spawnChance": {
-                "bigmap": 30,
-                "factory4_day": 0,
-                "factory4_night": 0,
-                "interchange": 0,
-                "laboratory": 0,
-                "lighthouse": 0,
-                "rezervbase": 0,
-                "sandbox": 0,
-                "sandbox_high": 0,
-                "shoreline": 0,
-                "tarkovstreets": 0,
-                "woods": 0
-            },
-            "bossZone": {
-                "bigmap": "ZoneDormitory,ZoneGasStation,ZoneScavBase",
-                "factory4_day": "",
-                "factory4_night": "",
-                "interchange": "",
-                "laboratory": "",
-                "lighthouse": "",
-                "rezervbase": "",
-                "sandbox": "",
-                "sandbox_high": "",
-                "shoreline": "",
-                "tarkovstreets": "",
-                "woods": ""
-            }
-        },
-        "bossTagilla": {
-            "enable": true,
-            "time": -1,
-            "spawnChance": {
-                "bigmap": 0,
-                "factory4_day": 30,
-                "factory4_night": 30,
-                "interchange": 0,
-                "laboratory": 0,
-                "lighthouse": 0,
-                "rezervbase": 0,
-                "sandbox": 0,
-                "sandbox_high": 0,
-                "shoreline": 0,
-                "tarkovstreets": 0,
-                "woods": 0
-            },
-            "bossZone": {
-                "bigmap": "",
-                "factory4_day": "BotZone",
-                "factory4_night": "BotZone",
-                "interchange": "",
-                "laboratory": "",
-                "lighthouse": "",
-                "rezervbase": "",
-                "sandbox": "",
-                "sandbox_high": "",
-                "shoreline": "",
-                "tarkovstreets": "",
-                "woods": ""
-            }
-        },
-        "bossKilla": {
-            "enable": true,
-            "time": -1,
-            "spawnChance": {
-                "bigmap": 0,
-                "factory4_day": 0,
-                "factory4_night": 0,
-                "interchange": 30,
-                "laboratory": 0,
-                "lighthouse": 0,
-                "rezervbase": 0,
-                "sandbox": 0,
-                "sandbox_high": 0,
-                "shoreline": 0,
-                "tarkovstreets": 0,
-                "woods": 0
-            },
-            "bossZone": {
-                "bigmap": "",
-                "factory4_day": "",
-                "factory4_night": "",
-                "interchange": "ZoneCenterBot,ZoneCenter,ZoneOLI,ZoneIDEA,ZoneGoshan",
-                "laboratory": "",
-                "lighthouse": "",
-                "rezervbase": "",
-                "sandbox": "",
-                "sandbox_high": "",
-                "shoreline": "",
-                "tarkovstreets": "",
-                "woods": ""
-            }
-        },
-        "bossZryachiy": {
-            "enable": true,
-            "time": -1,
-            "spawnChance": {
-                "bigmap": 0,
-                "factory4_day": 0,
-                "factory4_night": 0,
-                "interchange": 0,
-                "laboratory": 0,
-                "lighthouse": 100,
-                "rezervbase": 0,
-                "sandbox": 0,
-                "sandbox_high": 0,
-                "shoreline": 0,
-                "tarkovstreets": 0,
-                "woods": 0
-            },
-            "bossZone": {
-                "bigmap": "",
-                "factory4_day": "",
-                "factory4_night": "",
-                "interchange": "",
-                "laboratory": "",
-                "lighthouse": "Zone_Island",
-                "rezervbase": "",
-                "sandbox": "",
-                "sandbox_high": "",
-                "shoreline": "",
-                "tarkovstreets": "",
-                "woods": ""
-            }
-        },
-        "bossGluhar": {
-            "enable": true,
-            "time": -1,
-            "spawnChance": {
-                "bigmap": 0,
-                "factory4_day": 0,
-                "factory4_night": 0,
-                "interchange": 0,
-                "laboratory": 0,
-                "lighthouse": 0,
-                "rezervbase": 30,
-                "sandbox": 0,
-                "sandbox_high": 0,
-                "shoreline": 0,
-                "tarkovstreets": 0,
-                "woods": 0
-            },
-            "bossZone": {
-                "bigmap": "",
-                "factory4_day": "",
-                "factory4_night": "",
-                "interchange": "",
-                "laboratory": "",
-                "lighthouse": "",
-                "rezervbase": "ZoneRailStrorage,ZonePTOR2,ZoneBarrack,ZoneSubStorage",
-                "sandbox": "",
-                "sandbox_high": "",
-                "shoreline": "",
-                "tarkovstreets": "",
-                "woods": ""
-            }
-        },
-        "bossSanitar": {
-            "enable": true,
-            "time": -1,
-            "spawnChance": {
-                "bigmap": 0,
-                "factory4_day": 0,
-                "factory4_night": 0,
-                "interchange": 0,
-                "laboratory": 0,
-                "lighthouse": 0,
-                "rezervbase": 0,
-                "sandbox": 0,
-                "sandbox_high": 0,
-                "shoreline": 30,
-                "tarkovstreets": 0,
-                "woods": 0
-            },
-            "bossZone": {
-                "bigmap": "",
-                "factory4_day": "",
-                "factory4_night": "",
-                "interchange": "",
-                "laboratory": "",
-                "lighthouse": "",
-                "rezervbase": "",
-                "sandbox": "",
-                "sandbox_high": "",
-                "shoreline": "ZoneGreenHouses,ZoneSanatorium1,ZoneSanatorium2,ZonePort",
-                "tarkovstreets": "",
-                "woods": ""
-            }
-        },
-        "bossKolontay": {
-            "enable": true,
-            "time": -1,
-            "spawnChance": {
-                "bigmap": 0,
-                "factory4_day": 0,
-                "factory4_night": 0,
-                "interchange": 0,
-                "laboratory": 0,
-                "lighthouse": 0,
-                "rezervbase": 0,
-                "sandbox": 0,
-                "sandbox_high": 30,
-                "shoreline": 0,
-                "tarkovstreets": 30,
-                "woods": 0
-            },
-            "bossZone": {
-                "bigmap": "",
-                "factory4_day": "",
-                "factory4_night": "",
-                "interchange": "",
-                "laboratory": "",
-                "lighthouse": "",
-                "rezervbase": "",
-                "sandbox": "",
-                "sandbox_high": "ZoneSandbox",
-                "shoreline": "",
-                "tarkovstreets": "ZoneClimova,ZoneMvd",
-                "woods": ""
-            }
-        },
-        "bossBoar": {
-            "enable": true,
-            "time": -1,
-            "spawnChance": {
-                "bigmap": 0,
-                "factory4_day": 0,
-                "factory4_night": 0,
-                "interchange": 0,
-                "laboratory": 0,
-                "lighthouse": 0,
-                "rezervbase": 0,
-                "sandbox": 0,
-                "sandbox_high": 0,
-                "shoreline": 0,
-                "tarkovstreets": 30,
-                "woods": 0
-            },
-            "bossZone": {
-                "bigmap": "",
-                "factory4_day": "",
-                "factory4_night": "",
-                "interchange": "",
-                "laboratory": "",
-                "lighthouse": "",
-                "rezervbase": "",
-                "sandbox": "",
-                "sandbox_high": "",
-                "shoreline": "",
-                "tarkovstreets": "ZoneCarShowroom",
-                "woods": ""
-            }
-        },
-        "bossKojaniy": {
-            "enable": true,
-            "time": -1,
-            "spawnChance": {
-                "bigmap": 0,
-                "factory4_day": 0,
-                "factory4_night": 0,
-                "interchange": 0,
-                "laboratory": 0,
-                "lighthouse": 0,
-                "rezervbase": 0,
-                "sandbox": 0,
-                "sandbox_high": 0,
-                "shoreline": 0,
-                "tarkovstreets": 0,
-                "woods": 30
-            },
-            "bossZone": {
-                "bigmap": "",
-                "factory4_day": "",
-                "factory4_night": "",
-                "interchange": "",
-                "laboratory": "",
-                "lighthouse": "",
-                "rezervbase": "",
-                "sandbox": "",
-                "sandbox_high": "",
-                "shoreline": "",
-                "tarkovstreets": "",
-                "woods": "ZoneWoodCutter"
-            }
-        },
-        "bossPartisan": {
-            "enable": true,
-            "time": -1,
-            "spawnChance": {
-                "bigmap": 30,
-                "factory4_day": 0,
-                "factory4_night": 0,
-                "interchange": 0,
-                "laboratory": 0,
-                "lighthouse": 30,
-                "rezervbase": 0,
-                "sandbox": 0,
-                "sandbox_high": 0,
-                "shoreline": 30,
-                "tarkovstreets": 0,
-                "woods": 30
-            },
-            "bossZone": {
-                "bigmap": "",
-                "factory4_day": "",
-                "factory4_night": "",
-                "interchange": "",
-                "laboratory": "",
-                "lighthouse": "",
-                "rezervbase": "",
-                "sandbox": "",
-                "sandbox_high": "",
-                "shoreline": "",
-                "tarkovstreets": "",
-                "woods": ""
-            }
-        },
-        "sectantPriest": {
-            "enable": true,
-            "time": -1,
-            "spawnChance": {
-                "bigmap": 15,
-                "factory4_day": 0,
-                "factory4_night": 20,
-                "interchange": 0,
-                "laboratory": 0,
-                "lighthouse": 0,
-                "rezervbase": 0,
-                "sandbox": 0,
-                "sandbox_high": 44,
-                "shoreline": 15,
-                "tarkovstreets": 0,
-                "woods": 15
-            },
-            "bossZone": {
-                "bigmap": "ZoneScavBase",
-                "factory4_day": "",
-                "factory4_night": "BotZone",
-                "interchange": "",
-                "laboratory": "",
-                "lighthouse": "",
-                "rezervbase": "",
-                "sandbox": "",
-                "sandbox_high": "ZoneSandbox",
-                "shoreline": "ZoneSanatorium1,ZoneSanatorium2,ZoneForestSpawn",
-                "tarkovstreets": "",
-                "woods": "ZoneMiniHouse,ZoneBrokenVill"
-            }
-        },
-        "arenaFighterEvent": {
-            "enable": true,
-            "time": -1,
-            "spawnChance": {
-                "bigmap": 5,
-                "factory4_day": 0,
-                "factory4_night": 0,
-                "interchange": 0,
-                "laboratory": 0,
-                "lighthouse": 0,
-                "rezervbase": 0,
-                "sandbox": 0,
-                "sandbox_high": 0,
-                "shoreline": 0,
-                "tarkovstreets": 0,
-                "woods": 5
-            },
-            "bossZone": {
-                "bigmap": "ZoneFactoryCenter,ZoneScavBase",
-                "factory4_day": "",
-                "factory4_night": "",
-                "interchange": "",
-                "laboratory": "",
-                "lighthouse": "",
-                "rezervbase": "",
-                "sandbox": "",
-                "sandbox_high": "",
-                "shoreline": "",
-                "tarkovstreets": "",
-                "woods": "ZoneMiniHouse,ZoneClearVill,ZoneRoad,ZoneBrokenVill,ZoneScavBase2"
-            }
-        },
-        "pmcBot": {
-            "enable": true,
-            "addExtraSpawns": true,
-            "disableVanillaSpawns": false,
-            "time": -1,
-            "spawnChance": {
-                "bigmap": 0,
-                "factory4_day": 0,
-                "factory4_night": 0,
-                "interchange": 0,
-                "laboratory": 75,
-                "lighthouse": 0,
-                "rezervbase": 0,
-                "sandbox": 0,
-                "sandbox_high": 0,
-                "shoreline": 0,
-                "tarkovstreets": 0,
-                "woods": 0
-            },
-            "bossZone": {
-                "bigmap": "",
-                "factory4_day": "",
-                "factory4_night": "",
-                "interchange": "",
-                "laboratory": "BotZoneBasement,BotZoneFloor1,BotZoneFloor2",
-                "lighthouse": "",
-                "rezervbase": "",
-                "sandbox": "",
-                "sandbox_high": "",
-                "shoreline": "",
-                "tarkovstreets": "",
-                "woods": ""
-            }
-        },
-        "exUsec": {
-            "enable": true,
-            "addExtraSpawns": false,
-            "disableVanillaSpawns": false,
-            "time": -1,
-            "spawnChance": {
-                "bigmap": 0,
-                "factory4_day": 0,
-                "factory4_night": 0,
-                "interchange": 0,
-                "laboratory": 0,
-                "lighthouse": 0,
-                "rezervbase": 0,
-                "sandbox": 0,
-                "sandbox_high": 0,
-                "shoreline": 0,
-                "tarkovstreets": 0,
-                "woods": 0
-            },
-            "bossZone": {
-                "bigmap": "",
-                "factory4_day": "",
-                "factory4_night": "",
-                "interchange": "",
-                "laboratory": "",
-                "lighthouse": "",
-                "rezervbase": "",
-                "sandbox": "",
-                "sandbox_high": "",
-                "shoreline": "",
-                "tarkovstreets": "",
-                "woods": ""
-            }
-        },
-        "gifter": {
-            "enable": true,
-            "time": -1,
-            "spawnChance": {
-                "bigmap": 0,
-                "factory4_day": 0,
-                "factory4_night": 0,
-                "interchange": 0,
-                "laboratory": 0,
-                "lighthouse": 0,
-                "rezervbase": 0,
-                "sandbox": 0,
-                "sandbox_high": 0,
-                "shoreline": 0,
-                "tarkovstreets": 0,
-                "woods": 0
-            },
-            "bossZone": {
-                "bigmap": "",
-                "factory4_day": "",
-                "factory4_night": "",
-                "interchange": "",
-                "laboratory": "",
-                "lighthouse": "",
-                "rezervbase": "",
-                "sandbox": "",
-                "sandbox_high": "",
-                "shoreline": "",
-                "tarkovstreets": "",
-                "woods": ""
-            }
-        }
-    },
-    "configAppSettings": {
-            "showUndo": true,
-            "showDefault": false,
-            "disableAnimations": false
+    "waves": {
+      "enable": true,
+      "ignoreMaxBotCaps": false,
+      "groupChance": 25,
+      "maxGroupSize": 2,
+      "maxGroupCount": 1,
+      "maxBotsPerWave": 2,
+      "delayBeforeFirstWave": 299,
+        "secondsBetweenWaves": 600,
+      "stopWavesBeforeEndOfRaidLimit": 302
     }
+  },
+  "scavConfig": {
+    "startingScavs": {
+      "enable": true,
+      "maxBotSpawns": {
+        "bigmap": 5,
+        "factory4_day": 2,
+        "factory4_night": 3,
+        "interchange": 6,
+        "laboratory": 0,
+        "lighthouse": 6,
+        "rezervbase": 6,
+        "sandbox": 3,
+        "sandbox_high": 4,
+        "shoreline": 6,
+        "tarkovstreets": 4,
+        "woods": 5
+      },
+      "maxBotsPerZone": 2,
+      "startingMarksman": true
+    },
+    "waves": {
+      "enable": true,
+      "enableCustomFactory": true,
+      "startSpawns": 260,
+      "stopSpawns": 300,
+      "activeTimeMin": 200,
+      "activeTimeMax": 330,
+      "quietTimeMin": 210,
+      "quietTimeMax": 360,
+        "checkToSpawnTimer": 40,
+      "pendingBotsToTrigger": 2
+    }
+  },
+  "bossDifficulty": {
+    "easy": 0,
+    "normal": 45,
+    "hard": 40,
+    "impossible": 15
+  },
+  "bossConfig": {
+        "bossKnight": {
+          "enable": true,
+          "time": -1,
+          "spawnChance": {
+            "bigmap": 22,
+        "factory4_day": 0,
+        "factory4_night": 0,
+        "interchange": 0,
+        "laboratory": 0,
+        "lighthouse": 22,
+        "rezervbase": 0,
+        "sandbox": 0,
+        "sandbox_high": 0,
+        "shoreline": 22,
+        "tarkovstreets": 0,
+        "woods": 22
+      },
+      "bossZone": {
+        "bigmap": "ZoneScavBase,ZoneTankSquare",
+        "factory4_day": "",
+        "factory4_night": "",
+        "interchange": "",
+        "laboratory": "",
+        "lighthouse": "Zone_TreatmentContainers,Zone_Chalet",
+        "rezervbase": "",
+        "sandbox": "",
+        "sandbox_high": "",
+        "shoreline": "ZoneMeteoStation",
+        "tarkovstreets": "",
+        "woods": "ZoneScavBase2"
+      }
+    },
+    "bossBully": {
+      "enable": true,
+      "time": -1,
+      "spawnChance": {
+        "bigmap": 22,
+        "factory4_day": 0,
+        "factory4_night": 0,
+        "interchange": 0,
+        "laboratory": 0,
+        "lighthouse": 0,
+        "rezervbase": 0,
+        "sandbox": 0,
+        "sandbox_high": 0,
+        "shoreline": 0,
+        "tarkovstreets": 0,
+        "woods": 0
+      },
+      "bossZone": {
+        "bigmap": "ZoneDormitory,ZoneGasStation,ZoneScavBase",
+        "factory4_day": "",
+        "factory4_night": "",
+        "interchange": "",
+        "laboratory": "",
+        "lighthouse": "",
+        "rezervbase": "",
+        "sandbox": "",
+        "sandbox_high": "",
+        "shoreline": "",
+        "tarkovstreets": "",
+        "woods": ""
+      }
+    },
+    "bossTagilla": {
+      "enable": true,
+      "time": -1,
+      "spawnChance": {
+        "bigmap": 0,
+        "factory4_day": 35,
+        "factory4_night": 35,
+        "interchange": 0,
+        "laboratory": 0,
+        "lighthouse": 0,
+        "rezervbase": 0,
+        "sandbox": 0,
+        "sandbox_high": 0,
+        "shoreline": 0,
+        "tarkovstreets": 0,
+        "woods": 0
+      },
+      "bossZone": {
+        "bigmap": "",
+        "factory4_day": "BotZone",
+        "factory4_night": "BotZone",
+        "interchange": "",
+        "laboratory": "",
+        "lighthouse": "",
+        "rezervbase": "",
+        "sandbox": "",
+        "sandbox_high": "",
+        "shoreline": "",
+        "tarkovstreets": "",
+        "woods": ""
+      }
+    },
+    "bossKilla": {
+      "enable": true,
+      "time": -1,
+      "spawnChance": {
+        "bigmap": 0,
+        "factory4_day": 0,
+        "factory4_night": 0,
+        "interchange": 40,
+        "laboratory": 0,
+        "lighthouse": 0,
+        "rezervbase": 0,
+        "sandbox": 0,
+        "sandbox_high": 0,
+        "shoreline": 0,
+        "tarkovstreets": 0,
+        "woods": 0
+      },
+      "bossZone": {
+        "bigmap": "",
+        "factory4_day": "",
+        "factory4_night": "",
+        "interchange": "ZoneCenterBot,ZoneCenter,ZoneOLI,ZoneIDEA,ZoneGoshan",
+        "laboratory": "",
+        "lighthouse": "",
+        "rezervbase": "",
+        "sandbox": "",
+        "sandbox_high": "",
+        "shoreline": "",
+        "tarkovstreets": "",
+        "woods": ""
+      }
+    },
+    "bossZryachiy": {
+      "enable": false,
+      "time": -1,
+      "spawnChance": {
+        "bigmap": 0,
+        "factory4_day": 0,
+        "factory4_night": 0,
+        "interchange": 0,
+        "laboratory": 0,
+        "lighthouse": 5,
+        "rezervbase": 0,
+        "sandbox": 0,
+        "sandbox_high": 0,
+        "shoreline": 0,
+        "tarkovstreets": 0,
+        "woods": 0
+      },
+      "bossZone": {
+        "bigmap": "",
+        "factory4_day": "",
+        "factory4_night": "",
+        "interchange": "",
+        "laboratory": "",
+        "lighthouse": "Zone_Island",
+        "rezervbase": "",
+        "sandbox": "",
+        "sandbox_high": "",
+        "shoreline": "",
+        "tarkovstreets": "",
+        "woods": ""
+      }
+    },
+    "bossGluhar": {
+      "enable": true,
+      "time": -1,
+      "spawnChance": {
+        "bigmap": 0,
+        "factory4_day": 0,
+        "factory4_night": 0,
+        "interchange": 0,
+        "laboratory": 0,
+        "lighthouse": 0,
+        "rezervbase": 38,
+        "sandbox": 0,
+        "sandbox_high": 0,
+        "shoreline": 0,
+        "tarkovstreets": 0,
+        "woods": 0
+      },
+      "bossZone": {
+        "bigmap": "",
+        "factory4_day": "",
+        "factory4_night": "",
+        "interchange": "",
+        "laboratory": "",
+        "lighthouse": "",
+        "rezervbase": "ZoneRailStrorage,ZonePTOR2,ZoneBarrack,ZoneSubStorage",
+        "sandbox": "",
+        "sandbox_high": "",
+        "shoreline": "",
+        "tarkovstreets": "",
+        "woods": ""
+      }
+    },
+    "bossSanitar": {
+      "enable": true,
+      "time": -1,
+      "spawnChance": {
+        "bigmap": 0,
+        "factory4_day": 0,
+        "factory4_night": 0,
+        "interchange": 0,
+        "laboratory": 0,
+        "lighthouse": 0,
+        "rezervbase": 0,
+        "sandbox": 0,
+        "sandbox_high": 0,
+        "shoreline": 22,
+        "tarkovstreets": 0,
+        "woods": 0
+      },
+      "bossZone": {
+        "bigmap": "",
+        "factory4_day": "",
+        "factory4_night": "",
+        "interchange": "",
+        "laboratory": "",
+        "lighthouse": "",
+        "rezervbase": "",
+        "sandbox": "",
+        "sandbox_high": "",
+        "shoreline": "ZoneGreenHouses,ZoneSanatorium1,ZoneSanatorium2,ZonePort",
+        "tarkovstreets": "",
+        "woods": ""
+      }
+    },
+    "bossKolontay": {
+      "enable": true,
+      "time": -1,
+      "spawnChance": {
+        "bigmap": 0,
+        "factory4_day": 0,
+        "factory4_night": 0,
+        "interchange": 0,
+        "laboratory": 0,
+        "lighthouse": 0,
+        "rezervbase": 0,
+        "sandbox": 32,
+        "sandbox_high": 20,
+        "shoreline": 0,
+        "tarkovstreets": 18,
+        "woods": 0
+      },
+      "bossZone": {
+        "bigmap": "",
+        "factory4_day": "",
+        "factory4_night": "",
+        "interchange": "",
+        "laboratory": "",
+        "lighthouse": "",
+        "rezervbase": "",
+        "sandbox": "",
+        "sandbox_high": "ZoneSandbox",
+        "shoreline": "",
+        "tarkovstreets": "ZoneClimova,ZoneMvd",
+        "woods": ""
+      }
+    },
+    "bossBoar": {
+      "enable": true,
+      "time": -1,
+      "spawnChance": {
+        "bigmap": 0,
+        "factory4_day": 0,
+        "factory4_night": 0,
+        "interchange": 0,
+        "laboratory": 0,
+        "lighthouse": 0,
+        "rezervbase": 0,
+        "sandbox": 0,
+        "sandbox_high": 0,
+        "shoreline": 0,
+        "tarkovstreets": 18,
+        "woods": 0
+      },
+      "bossZone": {
+        "bigmap": "",
+        "factory4_day": "",
+        "factory4_night": "",
+        "interchange": "",
+        "laboratory": "",
+        "lighthouse": "",
+        "rezervbase": "",
+        "sandbox": "",
+        "sandbox_high": "",
+        "shoreline": "",
+        "tarkovstreets": "ZoneCarShowroom",
+        "woods": ""
+      }
+    },
+    "bossKojaniy": {
+      "enable": true,
+      "time": -1,
+      "spawnChance": {
+        "bigmap": 0,
+        "factory4_day": 0,
+        "factory4_night": 0,
+        "interchange": 0,
+        "laboratory": 0,
+        "lighthouse": 0,
+        "rezervbase": 0,
+        "sandbox": 0,
+        "sandbox_high": 0,
+        "shoreline": 0,
+        "tarkovstreets": 0,
+        "woods": 22
+      },
+      "bossZone": {
+        "bigmap": "",
+        "factory4_day": "",
+        "factory4_night": "",
+        "interchange": "",
+        "laboratory": "",
+        "lighthouse": "",
+        "rezervbase": "",
+        "sandbox": "",
+        "sandbox_high": "",
+        "shoreline": "",
+        "tarkovstreets": "",
+        "woods": "ZoneWoodCutter"
+      }
+    },
+    "bossPartisan": {
+      "enable": true,
+      "time": -1,
+      "spawnChance": {
+        "bigmap": 15,
+        "factory4_day": 0,
+        "factory4_night": 0,
+        "interchange": 0,
+        "laboratory": 0,
+        "lighthouse": 0,
+        "rezervbase": 0,
+        "sandbox": 0,
+        "sandbox_high": 0,
+        "shoreline": 0,
+        "tarkovstreets": 0,
+        "woods": 15
+      },
+      "bossZone": {
+        "bigmap": "",
+        "factory4_day": "",
+        "factory4_night": "",
+        "interchange": "",
+        "laboratory": "",
+        "lighthouse": "",
+        "rezervbase": "",
+        "sandbox": "",
+        "sandbox_high": "",
+        "shoreline": "",
+        "tarkovstreets": "",
+        "woods": "ZoneWoodCutter,ZoneMiniHouse,ZoneClearVill,ZoneStoneBunker,ZoneBrokenVill"
+      }
+    },
+    "sectantPriest": {
+      "enable": true,
+      "time": -1,
+      "spawnChance": {
+        "bigmap": 15,
+        "factory4_day": 20,
+        "factory4_night": 0,
+        "interchange": 0,
+        "laboratory": 0,
+        "lighthouse": 0,
+        "rezervbase": 0,
+        "sandbox": 0,
+        "sandbox_high": 25,
+        "shoreline": 10,
+        "tarkovstreets": 0,
+        "woods": 15
+      },
+      "bossZone": {
+        "bigmap": "ZoneScavBase",
+        "factory4_day": "BotZone",
+        "factory4_night": "BotZone",
+        "interchange": "",
+        "laboratory": "",
+        "lighthouse": "",
+        "rezervbase": "",
+        "sandbox": "",
+        "sandbox_high": "ZoneSandbox",
+        "shoreline": "ZoneSanatorium1,ZoneSanatorium2,ZoneForestSpawn",
+        "tarkovstreets": "",
+        "woods": "ZoneMiniHouse,ZoneBrokenVill"
+      }
+    },
+    "arenaFighterEvent": {
+      "enable": false,
+      "time": -1,
+      "spawnChance": {
+        "bigmap": 15,
+        "factory4_day": 0,
+        "factory4_night": 0,
+        "interchange": 0,
+        "laboratory": 0,
+        "lighthouse": 0,
+        "rezervbase": 0,
+        "sandbox": 0,
+        "sandbox_high": 0,
+        "shoreline": 0,
+        "tarkovstreets": 0,
+        "woods": 15
+      },
+      "bossZone": {
+        "bigmap": "ZoneFactoryCenter,ZoneScavBase",
+        "factory4_day": "",
+        "factory4_night": "",
+        "interchange": "",
+        "laboratory": "",
+        "lighthouse": "",
+        "rezervbase": "",
+        "sandbox": "",
+        "sandbox_high": "",
+        "shoreline": "",
+        "tarkovstreets": "",
+        "woods": "ZoneMiniHouse,ZoneClearVill,ZoneRoad,ZoneBrokenVill,ZoneScavBase2"
+      }
+    },
+    "pmcBot": {
+      "enable": true,
+      "addExtraSpawns": false,
+      "disableVanillaSpawns": false,
+      "time": -1,
+      "spawnChance": {
+        "bigmap": 0,
+        "factory4_day": 0,
+        "factory4_night": 0,
+        "interchange": 0,
+        "laboratory": 85,
+        "lighthouse": 0,
+        "rezervbase": 0,
+        "sandbox": 0,
+        "sandbox_high": 0,
+        "shoreline": 0,
+        "tarkovstreets": 0,
+        "woods": 0
+      },
+      "bossZone": {
+        "bigmap": "",
+        "factory4_day": "",
+        "factory4_night": "",
+        "interchange": "",
+        "laboratory": "BotZoneBasement,BotZoneFloor1,BotZoneFloor2",
+        "lighthouse": "",
+        "rezervbase": "",
+        "sandbox": "",
+        "sandbox_high": "",
+        "shoreline": "",
+        "tarkovstreets": "",
+        "woods": ""
+      }
+    },
+    "exUsec": {
+      "enable": true,
+      "addExtraSpawns": false,
+      "disableVanillaSpawns": false,
+      "time": -1,
+      "spawnChance": {
+        "bigmap": 0,
+        "factory4_day": 0,
+        "factory4_night": 0,
+        "interchange": 0,
+        "laboratory": 0,
+        "lighthouse": 0,
+        "rezervbase": 0,
+        "sandbox": 0,
+        "sandbox_high": 0,
+        "shoreline": 0,
+        "tarkovstreets": 0,
+        "woods": 0
+      },
+      "bossZone": {
+        "bigmap": "",
+        "factory4_day": "",
+        "factory4_night": "",
+        "interchange": "",
+        "laboratory": "",
+        "lighthouse": "",
+        "rezervbase": "",
+        "sandbox": "",
+        "sandbox_high": "",
+        "shoreline": "",
+        "tarkovstreets": "",
+        "woods": ""
+      }
+    },
+    "gifter": {
+      "enable": false,
+      "time": -1,
+      "spawnChance": {
+        "bigmap": 21,
+        "factory4_day": 19,
+        "factory4_night": 16,
+        "interchange": 16,
+        "laboratory": 0,
+        "lighthouse": 16,
+        "rezervbase": 15,
+        "sandbox": 0,
+        "sandbox_high": 15,
+        "shoreline": 15,
+        "tarkovstreets": 0,
+        "woods": 15
+      },
+      "bossZone": {
+        "bigmap": "ZoneGasStation,ZoneDormitory,ZoneOldAZS",
+        "factory4_day": "BotZone",
+        "factory4_night": "BotZone",
+        "interchange": "ZoneCenter,ZoneIDEAPark,ZoneIDEA",
+        "laboratory": "",
+        "lighthouse": "Zone_Rocks,Zone_Village,Zone_LongRoad",
+        "rezervbase": "ZonePTOR1,ZoneBarrack",
+        "sandbox": "",
+        "sandbox_high": "ZoneSandbox",
+        "shoreline": "ZonePowerStation,ZoneSanatorium1,ZoneSanatorium2",
+        "tarkovstreets": "",
+        "woods": "ZoneWoodCutter,ZoneScavBase2"
+      }
+    }
+  },
+  "configAppSettings": {
+    "showUndo": true,
+    "showDefault": true,
+    "disableAnimations": true
+  }
 }
